@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+       {{category.description|truncatewords:155}}
+  {% else %}
+         <p> welcome to EMK mall, Here you can buys different items....</p>
+  {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+      {{category.name}} - EMK MALL
+   {% else %}
+         See our new amazing collections -emk mall
+  {% endif %}
+{% endblock %}
+{% block content %}
+      {% if category %}
+          <div>
+                <div class="row my_row_class">
+                      <div class="mx_auto">
+                           <P><a href="{% url 'shopapp:allProdCat'  %}">our product collections</a></P>
+                </div>
+                    </div>
+          </div>
+      {% endif %}
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.img.url}}" alt="{{category.name}}" height="200px" width="700px">
+
+</div>
+<br>
+<div>
+                   <h1><b><u><i>{{category.name}}</i></u></b></h1>
+                       <p>{{category.description}}</p>
+ </div>
+{% else %}
+<div>
+   <img class="my image" src="{% static 'img/banner.jpg' %}" alt="our product" width="1350" height="550">
+</div>
+<br>
+<div>
+    <h1 class="text_center my_title"><b><u>Our products collections</u></b></h1>
+    <p>You can click on the ‘item to generate’ column and select the format you want content in.
+
+Below that, you can select if you want an HTML tag in your content or not After that, you can choose how many paragraphs you want in the ‘how many items to generate’ column.Then, yoFinally, click on the button ‘generate’</p>
+</div>
+        {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-3">
+                <div class="card text-center" style="min-width:18rem;" width=200px height=150px>
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image" src ="{{product.img.url}}" alt="{{product.name}}" width="350" height="200"></a>
+                    <div class="card-body">
+                     <h3><u>{{product.name}}</u></h3>
+                        <p>{{product.price}}</p>
+                    </div>
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %}active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
